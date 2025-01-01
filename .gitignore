@@ -1,1 +1,4 @@
 demo/out
+build-demo-Desktop_Qt_6_8_1_MSVC2022_64bit-Debug/
+build-demo-Desktop_Qt_6_8_1_MSVC2022_64bit-Profile/
+build-demo-Desktop_Qt_6_8_1_MSVC2022_64bit-Release/

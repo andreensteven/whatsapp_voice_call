@@ -26,3 +26,7 @@ login success
 
 ![image](https://github.com/user-attachments/assets/5c692ee7-2060-41aa-aa4f-dc3230c9755f)
 
+
+
+# How to compile demo
+Qt6 with WebSockets & Release

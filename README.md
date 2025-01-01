@@ -9,6 +9,10 @@ The software is used to test voice calls. You have two ways to login:
 ## 2: Scan  QR code. Once the login is successful, there is no need to scan the code again.
  In addition, in order to prevent the account from being disabled, you need to set up a proxy.
 
+# How to compile demo
+Qt6 with WebSockets & Release
+
+
 # How to use
 1. Make sure the computer's microphone and speakers are working.
 2. Login with six-segment number or scan qrcode
@@ -27,6 +31,3 @@ login success
 ![image](https://github.com/user-attachments/assets/5c692ee7-2060-41aa-aa4f-dc3230c9755f)
 
 
-
-# How to compile demo
-Qt6 with WebSockets & Release

@@ -24,10 +24,8 @@ Dialog::Dialog(QWidget *parent)
     ui->setupUi(this);
     opus_player_ = RecordApi::Create();
     init_code_ = opus_player_->Init([this]() -> std::string {
-      //播放器需要拿数据
       return HandleOutData();
       }, [this](const char* buffer, int size) {
-        //接收到录音数据
         HandleRecordData(buffer, size);
       });
 
@@ -83,7 +81,7 @@ void Dialog::OnWebsocketConnected()
 {
   ui->output->append("connected...");
   ui->output->append("login...");
-  // 发送登录命令
+  
   QJsonObject json;
   json["type"] = CommandType_Connect;
   json["role"] = "client";
@@ -141,12 +139,12 @@ void Dialog::PushFrame(const char* data, int len, uint16_t packet_serial, uint32
 void Dialog::ConnectToServer()
 {
   QUrl url(QStringLiteral("ws://47.243.17.172:8182"));
+
   voice_client_socket_.open(url);
   ui->login_btn->setEnabled(false);
   ui->account->setEnabled(false);
   ui->output->append("connecting...");
 
-  // 保存账号
   QSettings settings("whatsapp");
   settings.setValue("account", ui->account->text());
 }
@@ -154,7 +152,7 @@ void Dialog::ConnectToServer()
 
 void Dialog::OnWebsocketBinaryMessageReceived(const QByteArray& message)
 {
-  uint16_t packet_serial;
+    uint16_t packet_serial;
   memcpy(&packet_serial, message.data(), sizeof(packet_serial));
   packet_serial = ntohs(packet_serial);
 
@@ -162,7 +160,13 @@ void Dialog::OnWebsocketBinaryMessageReceived(const QByteArray& message)
   memcpy(&timestamp, message.data() + sizeof(packet_serial), sizeof(timestamp));
   timestamp = ntohl(timestamp);
 
-  PushFrame(message.data() + sizeof(packet_serial) + sizeof(timestamp), message.size() - sizeof(packet_serial) - sizeof(timestamp), packet_serial, timestamp);
+  uint16_t type;
+  memcpy(&type, message.data() + sizeof(packet_serial) + sizeof(timestamp), sizeof(type));
+  type = ntohs(type);
+  if (type == 0)
+  {
+    PushFrame(message.data() + sizeof(packet_serial) + sizeof(timestamp) + sizeof(type), message.size() - sizeof(packet_serial) - sizeof(timestamp) - sizeof(type), packet_serial, timestamp);
+  }
 }
 
 void Dialog::on_login_btn_clicked()
@@ -195,7 +199,6 @@ void Dialog::on_disconnect_btn_clicked()
 void Dialog::on_proxy_checkbox_stateChanged(int arg1)
 {
   QSettings settings("whatsapp");
-  // 保存是否选中状态
   settings.setValue("enable_proxy", ui->proxy_checkbox->isChecked());
 }
 
@@ -203,7 +206,6 @@ void Dialog::on_proxy_checkbox_stateChanged(int arg1)
 void Dialog::on_bussiness_checkbox_stateChanged(int arg1)
 {
   QSettings settings("whatsapp");
-  // 保存是否选中状态
   settings.setValue("bussiness", ui->bussiness_checkbox->isChecked());
 }
 
@@ -211,7 +213,6 @@ void Dialog::on_bussiness_checkbox_stateChanged(int arg1)
 void Dialog::on_scanqrcode_clicked()
 {
   reset_connection_ = false;
-  // 请求二维码
   QNetworkProxy proxy;
   if (ui->proxy_checkbox->isChecked())
   {

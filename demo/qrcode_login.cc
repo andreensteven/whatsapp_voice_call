@@ -26,7 +26,6 @@ QrcodeLogin::~QrcodeLogin()
 
 void QrcodeLogin::OnWebsocketConnected()
 {
-  // 发送登录命令
   QJsonObject json;
   json["type"] = CommandType_Connect;
   json["role"] = "client";

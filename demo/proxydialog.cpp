@@ -29,7 +29,6 @@ QNetworkProxy ProxyDialog::ReadLocalProxy()
 {
   QNetworkProxy proxy;
   QSettings settings("whatsapp");
-  // 读取代理
 
   QJsonDocument doc = QJsonDocument::fromJson(settings.value("proxy").toString().toUtf8());
   QJsonObject json = doc.object();
@@ -43,7 +42,6 @@ QNetworkProxy ProxyDialog::ReadLocalProxy()
 
 void ProxyDialog::on_ok_clicked()
 {
-  // 校验代理服务器和端口号
   if (ui->proxy_server->text().isEmpty() || ui->proxy_port->text().isEmpty())
   {
     return;
@@ -53,8 +51,7 @@ void ProxyDialog::on_ok_clicked()
   proxy_.setPort(ui->proxy_port->text().toInt());
   proxy_.setUser(ui->proxy_username->text());
   proxy_.setPassword(ui->proxy_password->text());
-  // 保存到本地文件
-
+  
   QJsonObject json;
   json["server"] = ui->proxy_server->text();
   json["port"] = ui->proxy_port->text().toInt();
